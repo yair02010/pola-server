@@ -18,7 +18,6 @@
     const orderRoutes = require("./routes/orderRoutes");
     const reviewRoutes = require("./routes/reviewRoutes");
     const contactRoutes = require("./routes/contactRoutes");
-    const uploadRoutes = require("./routes/uploadRoutes");
     const paymentRoutes = require("./routes/paymentRoutes");
     const userRoutes = require("./routes/userRoutes");
     const adminRoutes = require("./routes/adminRoutes");
@@ -40,7 +39,6 @@
     app.use("/api/orders", orderRoutes);
     app.use("/api/reviews", reviewRoutes);
     app.use("/api/contact", contactRoutes);
-    app.use("/api/upload", uploadRoutes);
     app.use("/api/payments", paymentRoutes);
     app.use("/api/users", userRoutes);
     app.use("/api/admin", adminRoutes);
