@@ -8,7 +8,7 @@
 
     // CORS setup
     const corsOptions = {
-    origin: ["http://localhost:5173", "https://pola-fullstack-1.onrender.com"],
+    origin: ["http://localhost:5173", "https://pola-server.onrender.com"],
     credentials: true,
     };
 
