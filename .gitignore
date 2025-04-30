@@ -1,0 +1,26 @@
+# node modules
+node_modules/
+
+# env files
+.env
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# runtime
+.pids
+*.pid
+*.seed
+
+# system files
+.DS_Store
+Thumbs.db
+
+# coverage
+coverage/
+
+# compiled
+dist/
+build/
