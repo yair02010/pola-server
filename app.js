@@ -6,9 +6,12 @@
     const helmet = require("helmet");
     const connectDB = require("./config/db");
 
-    // CORS setup
+    // ✅ CORS setup – כולל דומיין הפרונטנד ברנדר
     const corsOptions = {
-    origin: ["http://localhost:5173", "https://pola-server.onrender.com"],
+    origin: [
+        "http://localhost:5173",                       // dev
+        "https://pola-client-01h7.onrender.com"       // production client
+    ],
     credentials: true,
     };
 
@@ -28,7 +31,7 @@
     connectDB();
 
     // Middleware
-    app.use(cors(corsOptions)); // חייב לבוא לפני הראוטים
+    app.use(cors(corsOptions));
     app.use(express.json());
     app.use(helmet());
 
