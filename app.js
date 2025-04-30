@@ -26,10 +26,17 @@
 
     const app = express();
 
-    connectDB();
+    (async () => {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.error("❌ Failed to connect to MongoDB:", err.message);
+        process.exit(1);
+    }
+    })();
 
     app.use(cors(corsOptions));
-    app.options("*", cors(corsOptions)); 
+    app.options("*", cors(corsOptions));
 
     // Middleware
     app.use(express.json());
