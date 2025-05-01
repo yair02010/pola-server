@@ -4,51 +4,61 @@ const sendOrderConfirmation = require("../utils/mailer");
 const User = require("../models/User");
 
 const createOrder = async (req, res) => {
-    try {
-        const { items, deliveryMethod, paymentMethod, shippingAddress } = req.body;
+  try {
+    const { items, deliveryMethod, paymentMethod, shippingAddress } = req.body;
 
-        const orderItems = await Promise.all(
-            items.map(async (item) => {
-                const product = await Product.findById(item.productId);
-                if (!product) throw new Error("Product not found");
-                return {
-                    productId: product._id,
-                    name: product.name,
-                    imageUrl: product.imageUrl,
-                    price: product.price,
-                    quantity: item.quantity,
-                };
-            })
-        );
-
-        const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-        const newOrder = await Order.create({
-            user: req.user.userId,
-            items: orderItems,
-            deliveryMethod,
-            paymentMethod,
-            shippingAddress: deliveryMethod === "delivery" ? shippingAddress : {},
-            totalAmount,
-        });
-
-        const user = await User.findById(req.user.userId);
-        if (user && user.email) {
-            await sendOrderConfirmation({
-                to: user.email,
-                name: user.name,
-                orderId: newOrder._id,
-                totalAmount: newOrder.totalAmount,
-                paymentMethod: newOrder.paymentMethod,
-            });
+    const orderItems = await Promise.all(
+      items.map(async (item) => {
+        const product = await Product.findById(item.productId);
+        if (!product) {
+          throw new Error(`Product with ID ${item.productId} not found`);
         }
 
-        res.status(201).json(newOrder);
-    } catch (err) {
-        console.error("createOrder error:", err);
-        res.status(500).json({ message: "Failed to create order" });
+        return {
+          productId: product._id,
+          name: product.name,
+          imageUrl: product.imageUrl,
+          price: product.price,
+          quantity: item.quantity,
+        };
+      })
+    );
+
+    const totalAmount = orderItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    const newOrder = await Order.create({
+      user: req.user.userId,
+      items: orderItems,
+      deliveryMethod,
+      paymentMethod,
+      shippingAddress: deliveryMethod === "delivery" ? shippingAddress : {},
+      totalAmount,
+    });
+
+    const user = await User.findById(req.user.userId);
+    if (user?.email) {
+      await sendOrderConfirmation({
+        to: user.email,
+        name: user.name,
+        orderId: newOrder._id,
+        totalAmount: newOrder.totalAmount,
+        paymentMethod: newOrder.paymentMethod,
+      });
     }
+
+    res.status(201).json(newOrder);
+  } catch (err) {
+    console.error("createOrder error:", err);
+    res.status(500).json({
+      message: "Failed to create order",
+      error: err.message,
+    });
+  }
 };
+
 
 const getOrderById = async (req, res) => {
     try {
