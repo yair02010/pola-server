@@ -8,10 +8,10 @@
 
     const corsOptions = {
     origin: [
-        "http://localhost:5173",                     // dev
-        "https://pola-client-01h7.onrender.com"     // production client
+        "http://localhost:5173",
+        "https://pola-client-01h7.onrender.com"
     ],
-    credentials: true,
+    credentials: true
     };
 
     const authRoutes = require("./routes/authRoutes");
@@ -42,6 +42,12 @@
     app.use(express.json());
     app.use(helmet());
 
+    // Debug - Print auth header to verify token is being passed
+    app.use((req, res, next) => {
+    console.log("Auth Header:", req.headers.authorization);
+    next();
+    });
+
     // API Routes
     app.use("/api/auth", authRoutes);
     app.use("/api/products", productRoutes);
@@ -65,7 +71,7 @@
     });
 
     // Start server
-    const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 5001;
     app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    });
+    }); 
