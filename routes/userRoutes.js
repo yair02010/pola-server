@@ -3,7 +3,8 @@
     const {
     getWishlist,
     toggleWishlist,
-    getAllUsers
+    getAllUsers,
+    removeFromWishlist
     } = require("../controllers/userController");
     const auth = require("../middlewares/authMiddleware");
     const admin = require("../middlewares/adminMiddleware");
@@ -12,5 +13,5 @@
 
     router.get("/wishlist", auth, getWishlist);
     router.post("/wishlist", auth, toggleWishlist);
-
+    router.delete("/wishlist/:productId", auth, removeFromWishlist);
     module.exports = router;
