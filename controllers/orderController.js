@@ -121,9 +121,18 @@ const updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: "Failed to update order status" });
     }
 };
+    const getMyOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ user: req.user.userId }).populate("items.product");
+        res.json(orders);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to load orders" });
+    }
+};
 module.exports = {
     createOrder,
     getOrderById,
     getAllOrders,
     updateOrderStatus,
+    getMyOrders,
 };
