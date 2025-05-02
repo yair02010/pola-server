@@ -9,5 +9,5 @@ router.post("/", auth, createOrder);
 router.get("/", auth, admin, getAllOrders);
 router.get("/:id", auth, getOrderById);
 router.put("/:id/status", auth, admin, updateOrderStatus);
-
+router.get("/my-orders", auth, getMyOrders);
 module.exports = router;
